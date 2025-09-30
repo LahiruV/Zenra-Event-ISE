@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Send, Bot, User } from 'lucide-react'
-import { getChatResponse } from '../services/gemini'
+// import { getChatResponse } from '../services/gemini'
 import { useRef, useEffect } from 'react'
 
 interface Message {
@@ -48,12 +48,12 @@ export function Chatbot() {
       setMessages(prev => [...prev, typingMessage])
 
       // Get AI response
-      const aiResponse = await getChatResponse(input)
+      // const aiResponse = await getChatResponse(input)
 
       // Replace typing indicator with actual response
       setMessages(prev => prev.slice(0, -1).concat({
         id: messages.length + 2,
-        text: aiResponse,
+        text: '',
         sender: 'bot',
         timestamp: new Date()
       }))
@@ -102,8 +102,8 @@ export function Chatbot() {
                 </div>
                 <div
                   className={`rounded-lg p-3 ${message.sender === 'user'
-                      ? 'bg-black text-white'
-                      : 'bg-gray-100 text-gray-900'
+                    ? 'bg-black text-white'
+                    : 'bg-gray-100 text-gray-900'
                     }`}
                 >
                   <p className="text-sm">{message.text}</p>
