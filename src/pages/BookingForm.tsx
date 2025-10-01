@@ -19,6 +19,7 @@ export function BookingForm() {
         email: "",
         phone: "",
         specialNeed: "",
+        isPending: true
     })
 
     const [paymentData, setPaymentData] = useState({
@@ -147,10 +148,16 @@ export function BookingForm() {
                             <label className="block text-sm font-medium text-gray-700">Phone</label>
                             <input
                                 type="text"
+                                id="phone"
+                                maxLength={10}
+                                minLength={10}
+                                inputMode="numeric"
+                                pattern="[0-9]*"
                                 value={formData.phone}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, phone: e.target.value })
-                                }
+                                onChange={(e) => {
+                                    const value = e.target.value.replace(/\D/g, "")
+                                    setFormData({ ...formData, phone: value })
+                                }}
                                 required
                                 className="mt-1 block w-full border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2 text-sm focus:border-indigo-500 focus:ring-0 pl-2"
                             />

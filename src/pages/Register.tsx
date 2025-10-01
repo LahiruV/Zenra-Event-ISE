@@ -108,8 +108,15 @@ export function Register() {
               <input
                 type="tel"
                 id="phone"
+                maxLength={10}
+                minLength={10}
+                inputMode="numeric"
+                pattern="[0-9]*"
                 value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                onChange={(e) => {
+                  const onlyNums = e.target.value.replace(/\D/g, '')
+                  setFormData({ ...formData, phone: onlyNums })
+                }}
                 className="mt-1 block w-full border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2 text-sm focus:border-indigo-500 focus:ring-0 pl-2"
                 required
               />
