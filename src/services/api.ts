@@ -264,3 +264,18 @@ export async function deleteUser(id: string): Promise<void> {
     throw new Error('Failed to delete user')
   }
 }
+
+export async function updateUser(id: string, data: Partial<RegisterDto> & { isAdmin?: boolean }): Promise<void> {
+  const response = await fetch(`${API_URL}/auth/users/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+  if (!response.ok) {
+    throw new Error('Failed to update user')
+  }
+  return response.json()
+}

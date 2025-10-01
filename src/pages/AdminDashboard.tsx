@@ -5,7 +5,7 @@ import {
   useClients,
   useAdmins
 } from '../services/queries'
-import { AdminUsers } from './AdminUsers'
+import { AdminUsers } from '../components/AdminUsers'
 
 export function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<'users' | 'admins'>('users')
@@ -69,15 +69,15 @@ export function AdminDashboard() {
           </div>
         </div>
 
-        <div className="p-6">
+        <div className="p-6 min-h-[70vh]">
           {activeTab === 'users' ? (
             <div className="space-y-6">
               <AdminUsers userClients={userClients ?? []} />
             </div>
           ) : activeTab === 'admins' ? (
-            <>
+            <div className="space-y-6">
               <AdminUsers userClients={adminClients ?? []} isAdmin={true} />
-            </>
+            </div>
           ) : null}
         </div>
       </div>

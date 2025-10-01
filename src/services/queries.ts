@@ -75,6 +75,18 @@ export const useDeleteUser = () => {
     },
   })
 }
+
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Partial<RegisterDto> }) => api.updateUser(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['clients'] })
+      queryClient.invalidateQueries({ queryKey: ['admins'] })
+    },
+  })
+}
+
 // // Feedback queries
 export const useFeedbacks = () => {
   return useQuery({

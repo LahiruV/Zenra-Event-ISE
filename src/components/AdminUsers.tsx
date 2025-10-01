@@ -1,8 +1,10 @@
-import { Column, CommonTable } from "../components/Table"
+import { Column, CommonTable } from "./Table"
 import { Edit, Trash } from "lucide-react"
 import { Client } from "../services/types"
 import { useDeleteUser } from "../services/queries"
 import { toast } from "sonner"
+import { EditUserForm } from "./EditUserForm"
+import { useState } from "react"
 
 interface AdminUsersProps {
     userClients: Client[]
@@ -10,20 +12,26 @@ interface AdminUsersProps {
 }
 
 export function AdminUsers({ userClients, isAdmin }: AdminUsersProps) {
-
     const deleteUserMutation = useDeleteUser()
+    const [selectedUser, setSelectedUser] = useState<Client | null>(null)
 
     const handleDeleteUser = (id: string) => {
-        console.log(id, id.length);
-
         deleteUserMutation.mutate(id, {
             onSuccess: () => {
                 toast.success("User deleted successfully")
             },
             onError: () => {
                 toast.error("Failed to delete user")
-            }
+            },
         })
+    }
+
+    const handleEditUser = (user: Client) => {
+        setSelectedUser(user)
+    }
+
+    const handleCloseForm = () => {
+        setSelectedUser(null)
     }
 
     const columns: Column<Client>[] = [
@@ -37,7 +45,7 @@ export function AdminUsers({ userClients, isAdmin }: AdminUsersProps) {
             render: (client) => (
                 <div className="flex space-x-3">
                     <button
-                        onClick={() => console.log("Edit", client._id)}
+                        onClick={() => handleEditUser(client)}
                         className="text-blue-600 hover:text-blue-800"
                     >
                         <Edit size={16} />
@@ -48,18 +56,6 @@ export function AdminUsers({ userClients, isAdmin }: AdminUsersProps) {
                     >
                         <Trash size={16} />
                     </button>
-                    {/* <button
-                        onClick={() => console.log("Accept", client.id)}
-                        className="text-green-600 hover:text-green-800"
-                    >
-                        <Check size={16} />
-                    </button>
-                    <button
-                        onClick={() => console.log("Reject", client.id)}
-                        className="text-yellow-600 hover:text-yellow-800"
-                    >
-                        <X size={16} />
-                    </button> */}
                 </div>
             ),
         },
@@ -74,7 +70,7 @@ export function AdminUsers({ userClients, isAdmin }: AdminUsersProps) {
             render: (client) => (
                 <div className="flex space-x-3">
                     <button
-                        onClick={() => console.log("Edit", client._id)}
+                        onClick={() => handleEditUser(client)}
                         className="text-blue-600 hover:text-blue-800"
                     >
                         <Edit size={16} />
@@ -90,5 +86,18 @@ export function AdminUsers({ userClients, isAdmin }: AdminUsersProps) {
         },
     ]
 
-    return <CommonTable columns={isAdmin ? columnsAdmin : columns} data={userClients} />
+    return (
+        <>
+            {/* Show Edit Form only when a user is selected */}
+            {selectedUser && (
+                <EditUserForm
+                    user={selectedUser}
+                    isAdminRole={isAdmin}
+                    onClose={handleCloseForm}
+                />
+            )}
+
+            <CommonTable columns={isAdmin ? columnsAdmin : columns} data={userClients} />
+        </>
+    )
 }

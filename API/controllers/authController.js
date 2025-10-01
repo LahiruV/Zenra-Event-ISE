@@ -177,3 +177,22 @@ exports.deleteUser = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+exports.updateUser = async (req, res) => {
+    const userId = req.params.id;
+    const { name, phone, dob } = req.body;
+    try {
+        const db = await connectDB();
+        const result = await db.collection("users").updateOne(
+            { _id: require("mongodb").ObjectId.createFromHexString(userId) },
+            { $set: { name, phone, dob } }
+        );
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.json({ message: "User updated successfully" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};

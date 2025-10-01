@@ -93,4 +93,5 @@ export interface Client {
   email: string
   dob: string
   phone: string
+  isAdmin?: boolean
 }
