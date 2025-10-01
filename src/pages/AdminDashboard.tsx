@@ -17,8 +17,8 @@ export function AdminDashboard() {
   const error = userError || adminError
 
   const handleRefresh = () => {
-    queryClient.invalidateQueries({ queryKey: ['feedbacks'] })
-    queryClient.invalidateQueries({ queryKey: ['inquiries'] })
+    queryClient.invalidateQueries({ queryKey: ['clients'] })
+    queryClient.invalidateQueries({ queryKey: ['admins'] })
   }
 
   return (

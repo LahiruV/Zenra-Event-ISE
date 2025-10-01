@@ -115,6 +115,7 @@ export function EditUserForm({ user, isAdminRole, onClose }: EditUserFormProps) 
                                 onChange={(e) =>
                                     setFormData({ ...formData, dob: e.target.value })
                                 }
+                                max={new Date().toISOString().split("T")[0]}
                                 className="mt-1 block w-full border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2 text-sm focus:border-indigo-500 focus:ring-0 pl-2 pr-2" />
                         </div>
                     )}
