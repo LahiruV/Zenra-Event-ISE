@@ -35,14 +35,11 @@ export function Navbar() {
                 <Link to="/" className={isActive('/')}>
                   Home
                 </Link>
-                <Link to="/feedback" className={isActive('/feedback')}>
-                  Feedback
+                <Link to="/events" className={isActive('/events')}>
+                  Events
                 </Link>
-                <Link to="/chatbot" className={isActive('/chatbot')}>
-                  Chat
-                </Link>
-                <Link to="/inquiry" className={isActive('/inquiry')}>
-                  Inquiry
+                <Link to="/mybookings" className={isActive('/mybookings')}>
+                  My Bookings
                 </Link>
               </>
             )}

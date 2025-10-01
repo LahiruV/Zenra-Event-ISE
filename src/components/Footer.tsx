@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { CalendarDays, Ticket, Users, Globe, Heart, Mail, Phone, MapPin } from 'lucide-react'
+import { CalendarDays, Ticket, Users, Globe, Heart, Mail, Phone, MapPin, Lightbulb } from 'lucide-react'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -27,16 +27,16 @@ export function Footer() {
             </div>
             <ul className="space-y-2">
               <li>
-                <a href="/events" className="text-gray-600 hover:text-yellow-500">Upcoming Events</a>
+                <a href="#" className="text-gray-600 hover:text-yellow-500">Upcoming Events</a>
               </li>
               <li>
-                <a href="/organizers" className="text-gray-600 hover:text-yellow-500">For Organizers</a>
+                <a href="#" className="text-gray-600 hover:text-yellow-500">For Organizers</a>
               </li>
               <li>
-                <a href="/tickets" className="text-gray-600 hover:text-yellow-500">Get Tickets</a>
+                <a href="#" className="text-gray-600 hover:text-yellow-500">Get Tickets</a>
               </li>
               <li>
-                <a href="/support" className="text-gray-600 hover:text-yellow-500">Support</a>
+                <a href="#" className="text-gray-600 hover:text-yellow-500">Support</a>
               </li>
             </ul>
           </div>
@@ -49,13 +49,13 @@ export function Footer() {
             </div>
             <ul className="space-y-2">
               <li>
-                <a href="/partners" className="text-gray-600 hover:text-yellow-500">Partners</a>
+                <a href="#" className="text-gray-600 hover:text-yellow-500">Partners</a>
               </li>
               <li>
-                <a href="/blogs" className="text-gray-600 hover:text-yellow-500">Blog & Updates</a>
+                <a href="#" className="text-gray-600 hover:text-yellow-500">Blog & Updates</a>
               </li>
               <li>
-                <a href="/faq" className="text-gray-600 hover:text-yellow-500">FAQs</a>
+                <a href="#" className="text-gray-600 hover:text-yellow-500">FAQs</a>
               </li>
               <li>
                 <Link to="/admin/login" className="text-gray-600 hover:text-yellow-500">Admin Portal</Link>
@@ -93,7 +93,7 @@ export function Footer() {
             </p>
             <div className="flex items-center space-x-2 mt-4 md:mt-0">
               <span className="text-gray-600">Making every event unforgettable with</span>
-              <Heart className="h-4 w-4 text-red-500" />
+              <Lightbulb className="h-4 w-4 text-yellow-500" />   <span className="text-gray-600">Zenra-Events</span>
             </div>
           </div>
         </div>
