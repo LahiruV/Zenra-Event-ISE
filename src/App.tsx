@@ -20,6 +20,7 @@ import { AdminRegister } from './pages/AdminRegister'
 import { AdminDashboard } from './pages/AdminDashboard'
 import { AuthProvider } from './contexts/AuthContext'
 import { Events } from './pages/Events'
+import { BookingForm } from './components/BookingForm'
 
 const queryClient = new QueryClient()
 
@@ -56,6 +57,7 @@ function App() {
               }>
                 <Route path="/" element={<Home />} />
                 <Route path="/events" element={<Events />} />
+                <Route path="/bookingform" element={<BookingForm />} />
                 <Route path="/feedback" element={<Feedback />} />
                 <Route path="/chatbot" element={<Chatbot />} />
                 <Route path="/inquiry" element={<Inquiry />} />
