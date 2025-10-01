@@ -1,4 +1,3 @@
-import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -10,9 +9,6 @@ import { AuthLayout } from './layouts/AuthLayout'
 import { UserLayout } from './layouts/UserLayout'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { Home } from './pages/Home'
-import { Feedback } from './pages/Feedback'
-import { Chatbot } from './pages/Chatbot'
-import { Inquiry } from './pages/Inquiry'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
 import { AdminLogin } from './pages/AdminLogin'
@@ -58,9 +54,6 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/events" element={<Events />} />
                 <Route path="/bookingform" element={<BookingForm />} />
-                <Route path="/feedback" element={<Feedback />} />
-                <Route path="/chatbot" element={<Chatbot />} />
-                <Route path="/inquiry" element={<Inquiry />} />
               </Route>
             </Routes>
           </Router>

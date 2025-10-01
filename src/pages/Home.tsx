@@ -1,7 +1,6 @@
 import { Hero } from '../components/Hero'
 import { MessageSquare, Loader2 } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { useFeedbacks } from '../services/queries'
 
 interface FeedbackItem {
   id: string
@@ -36,10 +35,7 @@ const dummyFeedbacks: FeedbackItem[] = [
 ]
 
 export function Home() {
-  const { data: feedbackResponse, isLoading, error } = useFeedbacks()
-  const feedbacks = feedbackResponse?.feedbacks?.length
-    ? feedbackResponse.feedbacks
-    : dummyFeedbacks
+  const feedbacks = dummyFeedbacks
 
   return (
     <>
@@ -64,35 +60,25 @@ export function Home() {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {isLoading ? (
-              <div className="col-span-3 text-center py-8">
-                <Loader2 className="h-8 w-8 animate-spin mx-auto text-yellow-500" />
-                <p className="mt-2 text-gray-600">Loading event feedback...</p>
-              </div>
-            ) : error ? (
-              <div className="col-span-3 text-center py-8">
-                <p className="text-red-600">Error loading feedback</p>
-              </div>
-            ) : (
-              feedbacks.map((feedback) => (
-                <motion.div
-                  key={feedback.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  viewport={{ once: true }}
-                  className="bg-gray-50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
-                >
-                  <p className="text-gray-600 mb-4 italic">"{feedback.message}"</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-gray-900">{feedback.name}</span>
-                    <span className="text-sm text-gray-500">
-                      {new Date(feedback.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                </motion.div>
-              ))
-            )}
+
+            {feedbacks.map((feedback) => (
+              <motion.div
+                key={feedback.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+                className="bg-gray-50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
+              >
+                <p className="text-gray-600 mb-4 italic">"{feedback.message}"</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-900">{feedback.name}</span>
+                  <span className="text-sm text-gray-500">
+                    {new Date(feedback.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>

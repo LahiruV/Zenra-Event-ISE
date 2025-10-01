@@ -42,19 +42,16 @@ export function BookingForm() {
         let valid = true
         let newErrors = { cardNumber: "", expiry: "", cvc: "" }
 
-        // Card number validation: 16 digits only
         if (!/^\d{16}$/.test(paymentData.cardNumber)) {
             newErrors.cardNumber = "Card number must be 16 digits"
             valid = false
         }
 
-        // Expiry validation: MM/YY format + valid month
         if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(paymentData.expiry)) {
             newErrors.expiry = "Expiry must be in MM/YY format"
             valid = false
         }
 
-        // CVC validation: 3 digits only
         if (!/^\d{3}$/.test(paymentData.cvc)) {
             newErrors.cvc = "CVC must be 3 digits"
             valid = false
