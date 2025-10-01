@@ -19,6 +19,7 @@ import { AdminLogin } from './pages/AdminLogin'
 import { AdminRegister } from './pages/AdminRegister'
 import { AdminDashboard } from './pages/AdminDashboard'
 import { AuthProvider } from './contexts/AuthContext'
+import { Events } from './pages/Events'
 
 const queryClient = new QueryClient()
 
@@ -28,7 +29,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <Router>
-            <Toaster position="top-right" richColors />
+            <Toaster richColors closeButton position="bottom-right" />
             <Routes>
               {/* Auth Routes */}
               <Route element={<AuthLayout />}>
@@ -54,6 +55,7 @@ function App() {
                 </ProtectedRoute>
               }>
                 <Route path="/" element={<Home />} />
+                <Route path="/events" element={<Events />} />
                 <Route path="/feedback" element={<Feedback />} />
                 <Route path="/chatbot" element={<Chatbot />} />
                 <Route path="/inquiry" element={<Inquiry />} />
