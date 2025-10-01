@@ -31,3 +31,18 @@ export interface Client {
   phone: string
   isAdmin?: boolean
 }
+
+export interface Booking {
+  _id?: string
+  userId: string
+  eventId: string
+  eventName: string
+  eventPrice: string
+  date: string
+  name: string
+  email: string
+  phone: string
+  specialNeed: string
+  createdAt?: string
+  isPending: boolean
+}
