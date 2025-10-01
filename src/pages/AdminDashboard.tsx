@@ -79,7 +79,7 @@ export function AdminDashboard() {
           </div>
         </div>
 
-        <div className="p-6 min-h-[70vh]">
+        <div className="p-6 min-h-[65vh] max-h-[65vh]">
           {activeTab === 'users' ? (
             <div className="space-y-6">
               <AdminUsers userClients={userClients ?? []} />
