@@ -10,6 +10,11 @@ export function BookingForm() {
     const [loading, setLoading] = useState(false)
 
     const [formData, setFormData] = useState({
+        userId: "",
+        eventId: "",
+        eventName: "",
+        eventPrice: "",
+        date: "",
         name: "",
         email: "",
         phone: "",
@@ -88,12 +93,10 @@ export function BookingForm() {
     return (
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
             <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
-                {/* Header */}
                 <h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">
                     {step === 1 ? "Book Your Event" : "Payment Details"}
                 </h1>
 
-                {/* Event Info Card */}
                 <div className="mb-8 p-5 rounded-2xl border bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm">
                     <h2 className="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
                         🎟️ Event Summary
@@ -109,13 +112,12 @@ export function BookingForm() {
                         </div>
                         <div className="flex flex-col">
                             <span className="text-gray-500 font-medium">Price</span>
-                            <span className="text-green-600 font-bold text-lg">{event.price}</span>
+                            <span className="text-green-600 font-bold text-lg">{event.price} LKR</span>
                         </div>
                     </div>
                 </div>
 
 
-                {/* Step 1: User Details */}
                 {step === 1 && (
                     <form onSubmit={handleNext} className="space-y-5">
                         <div>
@@ -158,6 +160,19 @@ export function BookingForm() {
                         </div>
 
                         <div>
+                            <label className="block text-sm font-medium text-gray-700">Date</label>
+                            <input
+                                type="date"
+                                value={formData.date}
+                                min={new Date().toISOString().split("T")[0]}
+                                onChange={(e) =>
+                                    setFormData({ ...formData, date: e.target.value })
+                                }
+                                required
+                                className="mt-1 block w-full border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2 text-sm focus:border-indigo-500 focus:ring-0 pl-2 pr-2"
+                            />
+                        </div>
+                        <div>
                             <label className="block text-sm font-medium text-gray-700">Special Needs</label>
                             <textarea
                                 value={formData.specialNeed}
@@ -177,7 +192,6 @@ export function BookingForm() {
                     </form>
                 )}
 
-                {/* Step 2: Payment */}
                 {step === 2 && (
                     <form onSubmit={handlePay} className="space-y-5">
                         <div>

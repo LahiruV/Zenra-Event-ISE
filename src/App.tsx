@@ -20,7 +20,7 @@ import { AdminRegister } from './pages/AdminRegister'
 import { AdminDashboard } from './pages/AdminDashboard'
 import { AuthProvider } from './contexts/AuthContext'
 import { Events } from './pages/Events'
-import { BookingForm } from './components/BookingForm'
+import { BookingForm } from './pages/BookingForm'
 
 const queryClient = new QueryClient()
 
