@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { RefreshCw, User } from 'lucide-react'
+import { RefreshCw, Ticket, User, User2, UserCheck } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
 import {
   useClients,
@@ -8,7 +8,7 @@ import {
 import { AdminUsers } from '../components/AdminUsers'
 
 export function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState<'users' | 'admins'>('users')
+  const [activeTab, setActiveTab] = useState<'users' | 'admins' | 'bookings'>('users')
   const queryClient = useQueryClient()
   const { data: userClients, isLoading: isUserLoading, error: userError } = useClients()
   const { data: adminClients, isLoading: isAdminLoading, error: adminError } = useAdmins()
@@ -62,8 +62,18 @@ export function AdminDashboard() {
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center`}
               >
-                <User className="h-5 w-5 mr-2" />
+                <UserCheck className="h-5 w-5 mr-2" />
                 Admins ({adminClients?.length || 0})
+              </button>
+              <button
+                onClick={() => setActiveTab('bookings')}
+                className={`${activeTab === 'bookings'
+                  ? 'border-yellow-500 text-yellow-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center`}
+              >
+                <Ticket className="h-5 w-5 mr-2" />
+                Bookings ({adminClients?.length || 0})
               </button>
             </nav>
           </div>
