@@ -6,7 +6,6 @@ import { RootState } from "../store/store"
 
 export function BookingForm() {
     const event = useSelector((state: RootState) => state.common.selectedItem)
-
     const [step, setStep] = useState<1 | 2>(1)
     const [loading, setLoading] = useState(false)
 
@@ -23,13 +22,47 @@ export function BookingForm() {
         cvc: "",
     })
 
+    const [errors, setErrors] = useState({
+        cardNumber: "",
+        expiry: "",
+        cvc: "",
+    })
+
     const handleNext = (e: React.FormEvent) => {
         e.preventDefault()
         setStep(2)
     }
 
+    const validatePayment = () => {
+        let valid = true
+        let newErrors = { cardNumber: "", expiry: "", cvc: "" }
+
+        // Card number validation: 16 digits only
+        if (!/^\d{16}$/.test(paymentData.cardNumber)) {
+            newErrors.cardNumber = "Card number must be 16 digits"
+            valid = false
+        }
+
+        // Expiry validation: MM/YY format + valid month
+        if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(paymentData.expiry)) {
+            newErrors.expiry = "Expiry must be in MM/YY format"
+            valid = false
+        }
+
+        // CVC validation: 3 digits only
+        if (!/^\d{3}$/.test(paymentData.cvc)) {
+            newErrors.cvc = "CVC must be 3 digits"
+            valid = false
+        }
+
+        setErrors(newErrors)
+        return valid
+    }
+
     const handlePay = async (e: React.FormEvent) => {
         e.preventDefault()
+        if (!validatePayment()) return
+
         setLoading(true)
         setTimeout(() => {
             setLoading(false)
@@ -42,6 +75,12 @@ export function BookingForm() {
             <div className="max-w-2xl mx-auto mt-20 text-center text-gray-600">
                 <h2 className="text-lg font-semibold">No event selected</h2>
                 <p>Please go back and choose an event.</p>
+                <button
+                    onClick={() => window.history.back()}
+                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                >
+                    Go Back
+                </button>
             </div>
         )
     }
@@ -55,17 +94,26 @@ export function BookingForm() {
                 </h1>
 
                 {/* Event Info Card */}
-                <div className="mb-6 p-4 border rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50">
-                    <p className="text-sm text-gray-700">
-                        <span className="font-semibold">Event ID:</span> {event.id}
-                    </p>
-                    <p className="text-sm text-gray-700">
-                        <span className="font-semibold">Event:</span> {event.name}
-                    </p>
-                    <p className="text-sm text-gray-700">
-                        <span className="font-semibold">Price:</span> ${event.price}
-                    </p>
+                <div className="mb-8 p-5 rounded-2xl border bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm">
+                    <h2 className="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
+                        🎟️ Event Summary
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                        <div className="flex flex-col">
+                            <span className="text-gray-500 font-medium">Event ID</span>
+                            <span className="text-gray-900 font-semibold">{event.id}</span>
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-gray-500 font-medium">Event Name</span>
+                            <span className="text-gray-900 font-semibold">{event.name}</span>
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-gray-500 font-medium">Price</span>
+                            <span className="text-green-600 font-bold text-lg">{event.price}</span>
+                        </div>
+                    </div>
                 </div>
+
 
                 {/* Step 1: User Details */}
                 {step === 1 && (
@@ -122,7 +170,7 @@ export function BookingForm() {
 
                         <button
                             type="submit"
-                            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition shadow-md"
+                            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition shadow-md"
                         >
                             Continue to Payment
                         </button>
@@ -142,8 +190,12 @@ export function BookingForm() {
                                 }
                                 required
                                 placeholder="1234 5678 9012 3456"
+                                maxLength={16}
                                 className="mt-1 block w-full border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2 text-sm focus:border-indigo-500 focus:ring-0 pl-2"
                             />
+                            {errors.cardNumber && (
+                                <p className="text-red-500 text-xs mt-1">{errors.cardNumber}</p>
+                            )}
                         </div>
 
                         <div className="flex space-x-4">
@@ -157,8 +209,12 @@ export function BookingForm() {
                                     }
                                     required
                                     placeholder="MM/YY"
+                                    maxLength={5}
                                     className="mt-1 block w-full border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2 text-sm focus:border-indigo-500 focus:ring-0 pl-2"
                                 />
+                                {errors.expiry && (
+                                    <p className="text-red-500 text-xs mt-1">{errors.expiry}</p>
+                                )}
                             </div>
                             <div className="flex-1">
                                 <label className="block text-sm font-medium text-gray-700">CVC</label>
@@ -170,8 +226,12 @@ export function BookingForm() {
                                     }
                                     required
                                     placeholder="123"
+                                    maxLength={3}
                                     className="mt-1 block w-full border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2 text-sm focus:border-indigo-500 focus:ring-0 pl-2"
                                 />
+                                {errors.cvc && (
+                                    <p className="text-red-500 text-xs mt-1">{errors.cvc}</p>
+                                )}
                             </div>
                         </div>
 

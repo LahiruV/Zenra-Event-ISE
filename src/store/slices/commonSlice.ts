@@ -5,18 +5,19 @@ interface CommonState {
 }
 
 const initialState: CommonState = {
-    selectedItem: null,
+    selectedItem: JSON.parse(localStorage.getItem('selectedItem') || 'null')
 }
 
-const authSlice = createSlice({
+const commonSlice = createSlice({
     name: 'common',
     initialState,
     reducers: {
         setSelectedItem(state, action: PayloadAction<any>) {
             state.selectedItem = action.payload
+            localStorage.setItem('selectedItem', JSON.stringify(action.payload))
         }
     },
 })
 
-export const { setSelectedItem } = authSlice.actions
-export default authSlice.reducer
+export const { setSelectedItem } = commonSlice.actions
+export default commonSlice.reducer
