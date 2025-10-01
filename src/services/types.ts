@@ -46,3 +46,30 @@ export interface Booking {
   createdAt?: string
   isPending: boolean
 }
+
+export interface BookingDto {
+  userId: string
+  eventId: string
+  eventName: string
+  eventPrice: string
+  date: string
+  name: string
+  email: string
+  phone: string
+  specialNeed: string
+  isPending: boolean
+}
+
+export interface UpdateBookingStatusDto {
+  isPending: boolean
+}
+
+export interface UpdateBookingDto {
+  date?: string
+  name?: string
+  email?: string
+  phone?: string
+  specialNeed?: string
+  isPending?: boolean
+}
+

@@ -1,5 +1,7 @@
-import type { LoginDto, RegisterDto, AdminLoginDto, AdminRegisterDto } from './types'
+import type { LoginDto, RegisterDto, AdminLoginDto, AdminRegisterDto, BookingDto, UpdateBookingDto, UpdateBookingStatusDto } from './types'
 import { API_URL } from './url'
+
+// Authentication APIs
 
 export async function login(credentials: LoginDto): Promise<{ token: string }> {
   const response = await fetch(`${API_URL}/auth/login`, {
@@ -60,6 +62,8 @@ export async function adminRegister(data: AdminRegisterDto): Promise<{ token: st
 
   return response.json()
 }
+
+// User Management APIs
 
 export async function getUser(): Promise<{ token: string }> {
   const response = await fetch(`${API_URL}/auth/me`, {
@@ -124,4 +128,87 @@ export async function updateUser(id: string, data: Partial<RegisterDto> & { isAd
     throw new Error('Failed to update user')
   }
   return response.json()
+}
+
+// Booking Management APIs
+
+export async function createBooking(data: BookingDto): Promise<any> {
+  const response = await fetch(`${API_URL}/bookings`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+  if (!response.ok) {
+    throw new Error('Failed to create booking')
+  }
+  return response.json()
+}
+
+export async function getUserBookings(userId: string): Promise<any[]> {
+  const response = await fetch(`${API_URL}/bookings/user/${userId}`, {
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    },
+  })
+  if (!response.ok) {
+    throw new Error('Failed to fetch user bookings')
+  }
+  return response.json()
+}
+
+export async function getAllBookings(): Promise<any[]> {
+  const response = await fetch(`${API_URL}/bookings`, {
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    },
+  })
+  if (!response.ok) {
+    throw new Error('Failed to fetch bookings')
+  }
+  return response.json()
+}
+
+export async function updateBooking(id: string, data: UpdateBookingDto): Promise<any> {
+  const response = await fetch(`${API_URL}/bookings/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+  if (!response.ok) {
+    throw new Error('Failed to update booking')
+  }
+  return response.json()
+}
+
+export async function updateBookingStatus(id: string, data: UpdateBookingStatusDto): Promise<any> {
+  const response = await fetch(`${API_URL}/bookings/${id}/status`, {
+    method: 'PATCH',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+  if (!response.ok) {
+    throw new Error('Failed to update booking status')
+  }
+  return response.json()
+}
+
+export async function deleteBooking(id: string): Promise<void> {
+  const response = await fetch(`${API_URL}/bookings/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    },
+  })
+  if (!response.ok) {
+    throw new Error('Failed to delete booking')
+  }
 }

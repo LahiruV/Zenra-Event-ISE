@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import * as api from './api'
-import type { LoginDto, RegisterDto, AdminLoginDto, AdminRegisterDto } from './types'
+import type { LoginDto, RegisterDto, AdminLoginDto, AdminRegisterDto, UpdateBookingStatusDto, UpdateBookingDto, BookingDto } from './types'
 
 // Auth queries
 export const useLogin = () => {
@@ -42,6 +42,8 @@ export const useAdminRegister = () => {
     },
   })
 }
+
+// User queries
 
 export const useUser = () => {
   return useQuery({
@@ -86,3 +88,60 @@ export const useUpdateUser = () => {
     },
   })
 }
+
+// Booking queries
+
+export const useCreateBooking = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (data: BookingDto) => api.createBooking(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['bookings'] })
+    },
+  })
+}
+
+export const useBookings = () => {
+  return useQuery({
+    queryKey: ['bookings'],
+    queryFn: api.getAllBookings,
+  })
+}
+
+export const getUserBookings = (userId: string) => {
+  return useQuery({
+    queryKey: ['user-bookings', userId],
+    queryFn: () => api.getUserBookings(userId),
+    enabled: !!userId,
+  })
+}
+
+export const useDeleteBooking = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => api.deleteBooking(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['bookings'] })
+    },
+  })
+}
+
+export const useUpdateBookingStatus = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateBookingStatusDto }) => api.updateBookingStatus(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['bookings'] })
+    },
+  })
+}
+
+export const useUpdateBooking = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateBookingDto }) => api.updateBooking(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['bookings'] })
+    },
+  })
+}     
