@@ -17,6 +17,7 @@ import { AdminDashboard } from './pages/AdminDashboard'
 import { AuthProvider } from './contexts/AuthContext'
 import { Events } from './pages/Events'
 import { BookingForm } from './pages/BookingForm'
+import { MyBookingList } from './pages/MyBookings'
 
 const queryClient = new QueryClient()
 
@@ -54,6 +55,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/events" element={<Events />} />
                 <Route path="/bookingform" element={<BookingForm />} />
+                <Route path="/mybookings" element={<MyBookingList />} />
               </Route>
             </Routes>
           </Router>

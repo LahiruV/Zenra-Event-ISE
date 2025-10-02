@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const connectDB = require("../models/db");
 
 exports.createBooking = async (req, res) => {
@@ -15,11 +16,12 @@ exports.createBooking = async (req, res) => {
 };
 
 exports.getUserBookings = async (req, res) => {
+    const userId = req.params.id;
     try {
         const db = await connectDB();
         const bookings = await db
             .collection("bookings")
-            .find({ userId: require("mongodb").ObjectId.createFromHexString(req.user.id) })
+            .find({ userId: require("mongodb").ObjectId.createFromHexString(userId) })
             .toArray();
 
         res.json(bookings);
@@ -40,25 +42,53 @@ exports.getAllBookings = async (req, res) => {
 
 exports.updateBooking = async (req, res) => {
     const bookingId = req.params.id;
-    const updateData = req.body;
+    const {
+        userId,
+        eventId,
+        eventName,
+        eventPrice,
+        date,
+        name,
+        email,
+        phone,
+        specialNeed,
+        isPending,
+        createdAt,
+    } = req.body;
+
     try {
         const db = await connectDB();
-        const result = await db
-            .collection("bookings")
-            .updateOne(
-                { _id: require("mongodb").ObjectId.createFromHexString(bookingId) },
-                { $set: updateData }
-            );
+
+        const updateFields = {
+            eventId,
+            eventName,
+            eventPrice,
+            name,
+            email,
+            phone,
+            specialNeed,
+            isPending,
+        };
+
+        if (userId) updateFields.userId = new ObjectId(userId);
+        if (createdAt) updateFields.createdAt = new Date(createdAt);
+
+        const result = await db.collection("bookings").updateOne(
+            { _id: new ObjectId(bookingId) },
+            { $set: updateFields }
+        );
 
         if (result.matchedCount === 0) {
             return res.status(404).json({ error: "Booking not found" });
         }
 
-        res.json({ message: "Booking updated" });
+        res.json({ message: "Booking updated successfully" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 };
+
+
 
 exports.updateBookingStatus = async (req, res) => {
     const bookingId = req.params.id;

@@ -122,6 +122,7 @@ export const useDeleteBooking = () => {
     mutationFn: (id: string) => api.deleteBooking(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['bookings'] })
+      queryClient.invalidateQueries({ queryKey: ['user-bookings'] })
     },
   })
 }
@@ -142,6 +143,7 @@ export const useUpdateBooking = () => {
     mutationFn: ({ id, data }: { id: string; data: UpdateBookingDto }) => api.updateBooking(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['bookings'] })
+      queryClient.invalidateQueries({ queryKey: ['user-bookings'] })
     },
   })
 }     
