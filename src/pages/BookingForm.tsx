@@ -3,14 +3,19 @@ import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { useSelector } from "react-redux"
 import { RootState } from "../store/store"
+import { useCreateBooking, useUser } from "../services/queries"
+import { useNavigate } from "react-router-dom"
 
 export function BookingForm() {
+    const navigate = useNavigate()
     const event = useSelector((state: RootState) => state.common.selectedItem)
     const [step, setStep] = useState<1 | 2>(1)
     const [loading, setLoading] = useState(false)
+    const createBookingMutation = useCreateBooking()
+    const { data: user } = useUser()
 
     const [formData, setFormData] = useState({
-        userId: "",
+        userId: user?._id || "",
         eventId: "",
         eventName: "",
         eventPrice: "",
@@ -67,10 +72,41 @@ export function BookingForm() {
         if (!validatePayment()) return
 
         setLoading(true)
-        setTimeout(() => {
-            setLoading(false)
-            toast.success("Booking confirmed!")
-        }, 1200)
+        createBookingMutation.mutate({
+            ...formData,
+            eventId: event.id,
+            eventName: event.name,
+            eventPrice: event.price,
+            userId: user?._id
+        }, {
+            onSuccess: (data) => {
+                setLoading(false)
+                toast.success("Booking successful!")
+                setStep(1)
+                setFormData({
+                    userId: "",
+                    eventId: "",
+                    eventName: "",
+                    eventPrice: "",
+                    date: "",
+                    name: "",
+                    email: "",
+                    phone: "",
+                    specialNeed: "",
+                    isPending: true
+                })
+                setPaymentData({
+                    cardNumber: "",
+                    expiry: "",
+                    cvc: "",
+                })
+                navigate('/mybookings')
+            },
+            onError: (error) => {
+                setLoading(false)
+                toast.error("Booking failed. Please try again.")
+            }
+        })
     }
 
     if (!event) {

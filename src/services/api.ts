@@ -65,7 +65,7 @@ export async function adminRegister(data: AdminRegisterDto): Promise<{ token: st
 
 // User Management APIs
 
-export async function getUser(): Promise<{ token: string }> {
+export async function getUser(): Promise<any> {
   const response = await fetch(`${API_URL}/auth/me`, {
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('token')}`,
