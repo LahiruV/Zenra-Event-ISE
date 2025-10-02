@@ -29,12 +29,23 @@ export function MyBookingList() {
 
     const columns = [
         { key: 'eventName', label: 'Event Name' },
-        { key: 'eventPrice', label: 'Event Price' },
+        {
+            key: 'eventPrice', label: 'Event Price',
+            render: (row: any) => (`${row.eventPrice} LKR`)
+        },
         { key: 'date', label: 'Date' },
         { key: 'name', label: 'Name' },
         { key: 'email', label: 'Email' },
         { key: 'phone', label: 'Phone' },
-        { key: 'specialNeed', label: 'Special Needs' },
+        {
+            key: 'specialNeed',
+            label: 'Special Needs',
+            render: (row: any) => (
+                <div className="whitespace-pre-wrap break-words max-w-xs">
+                    {row.specialNeed || 'N/A'}
+                </div>
+            )
+        },
         {
             key: 'isPending', label: 'Status', render: (row: any) => (
                 row.isPending ? <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
