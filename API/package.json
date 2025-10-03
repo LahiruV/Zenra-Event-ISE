@@ -19,6 +19,7 @@
     "express-session": "^1.18.1",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.20.0",
+    "nodemailer": "^7.0.6",
     "sqlite3": "^5.1.7",
     "swagger-autogen": "^2.23.7",
     "swagger-jsdoc": "^6.2.8",
