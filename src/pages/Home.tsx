@@ -13,21 +13,21 @@ interface FeedbackItem {
 const dummyFeedbacks: FeedbackItem[] = [
   {
     id: '1',
-    name: 'Sarah Johnson',
+    name: 'Shan Singh',
     message: 'Zenra-Events made our corporate event seamless and stress-free. Highly recommend!',
     type: 'positive',
     createdAt: new Date('2025-01-12'),
   },
   {
     id: '2',
-    name: 'David Lee',
+    name: 'Pathum Nissanka',
     message: 'The ticketing system was smooth, and I loved the live updates during the concert!',
     type: 'positive',
     createdAt: new Date('2025-02-08'),
   },
   {
     id: '3',
-    name: 'Priya Sharma',
+    name: 'Alex Devidson',
     message: 'Amazing platform! Organizing our community festival was so much easier this year.',
     type: 'positive',
     createdAt: new Date('2025-03-20'),
