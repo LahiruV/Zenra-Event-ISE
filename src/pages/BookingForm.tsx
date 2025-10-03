@@ -239,9 +239,10 @@ export function BookingForm() {
                             <input
                                 type="text"
                                 value={paymentData.cardNumber}
-                                onChange={(e) =>
-                                    setPaymentData({ ...paymentData, cardNumber: e.target.value })
-                                }
+                                onChange={(e) => {
+                                    const value = e.target.value.replace(/\D/g, "")
+                                    setPaymentData({ ...paymentData, cardNumber: value })
+                                }}
                                 required
                                 placeholder="1234 5678 9012 3456"
                                 maxLength={16}
@@ -275,9 +276,10 @@ export function BookingForm() {
                                 <input
                                     type="text"
                                     value={paymentData.cvc}
-                                    onChange={(e) =>
-                                        setPaymentData({ ...paymentData, cvc: e.target.value })
-                                    }
+                                    onChange={(e) => {
+                                        const value = e.target.value.replace(/\D/g, "")
+                                        setPaymentData({ ...paymentData, cvc: value })
+                                    }}
                                     required
                                     placeholder="123"
                                     maxLength={3}
