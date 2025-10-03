@@ -1,13 +1,17 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { UserPlus, Loader2 } from 'lucide-react'
+import { UserPlus, Loader2, X } from 'lucide-react'
 import { toast } from 'sonner'
-import { useRegister } from '../services/queries'
+import { useRegister, useSendMail } from '../services/queries'
 import { useAuth } from '../contexts/AuthContext'
 import type { RegisterDto } from '../services/types'
 
 export function Register() {
   const navigate = useNavigate()
+  const [token, setToken] = useState<string | null>(null)
+  const [isOpen, setIsOpen] = useState(false)
+  const [verificationCode, setVerificationCode] = useState<string>("")
+  const [userInputCode, setUserInputCode] = useState<string>("")
   const { login: authLogin } = useAuth()
   const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState<
@@ -20,8 +24,9 @@ export function Register() {
     phone: '',
     dob: '',
   })
-
+  const authenticateCode = () => Math.floor(100000 + Math.random() * 900000).toString()
   const registerMutation = useRegister()
+  const sendMailMutation = useSendMail()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -40,12 +45,28 @@ export function Register() {
         phone: formData.phone,
         dob: formData.dob,
       } as RegisterDto)
-
-      authLogin(token)
-      navigate('/')
-      toast.success('Account created successfully!')
+      setToken(token)
+      const code = authenticateCode()
+      setVerificationCode(code)
+      await sendMailMutation.mutateAsync({
+        to: formData.email,
+        subject: 'Email Verification Code',
+        text: `Your verification code is: ${code}`,
+      })
+      toast.success('Verification code sent to your email.')
+      setIsOpen(true)
     } catch (err) {
       toast.error('Registration failed. Please try again.')
+    }
+  }
+
+  const handleVerify = () => {
+    if (userInputCode === verificationCode) {
+      toast.success("Email verified successfully!")
+      authLogin(token!)
+      navigate("/")
+    } else {
+      toast.error("Invalid verification code. Please try again.")
     }
   }
 
@@ -189,6 +210,45 @@ export function Register() {
           </div>
         </div>
       </div>
+      {isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-sm">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-semibold text-gray-900">
+                Verify Your Email
+              </h2>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <p className="text-sm text-gray-600 mb-4">
+              Enter the 6-digit code we sent to{" "}
+              <span className="font-medium">{formData.email}</span>
+            </p>
+
+            <input
+              type="text"
+              value={userInputCode}
+              onChange={(e) =>
+                setUserInputCode(e.target.value.replace(/\D/g, ""))
+              }
+              maxLength={6}
+              placeholder="Enter code"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-center text-lg tracking-widest"
+            />
+
+            <button
+              onClick={handleVerify}
+              className="mt-4 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
+            >
+              Verify
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

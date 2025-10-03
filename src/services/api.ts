@@ -212,3 +212,18 @@ export async function deleteBooking(id: string): Promise<void> {
     throw new Error('Failed to delete booking')
   }
 }
+
+// Email Service API
+
+export async function sendEmail(to: string, subject: string, text: string): Promise<void> {
+  const response = await fetch(`${API_URL}/mail`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email: to, content: text, header: subject }),
+  })
+  if (!response.ok) {
+    throw new Error('Failed to send email')
+  }
+}

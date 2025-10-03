@@ -146,4 +146,16 @@ export const useUpdateBooking = () => {
       queryClient.invalidateQueries({ queryKey: ['user-bookings'] })
     },
   })
-}     
+}
+
+// Mail queries
+
+export const useSendMail = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (data: { to: string; subject: string; text: string; html?: string }) => api.sendEmail(data.to, data.subject, data.text),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['send-mail'] })
+    },
+  })
+}
