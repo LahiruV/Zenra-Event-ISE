@@ -100,7 +100,6 @@ export function AdminBooking({ bookingClients }: AdminBookingProps) {
 
     return (
         <>
-            {/* Search Bar aligned right */}
             <div className="flex justify-end mb-4">
                 <input
                     type="text"

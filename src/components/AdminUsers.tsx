@@ -14,6 +14,7 @@ interface AdminUsersProps {
 export function AdminUsers({ userClients, isAdmin }: AdminUsersProps) {
     const deleteUserMutation = useDeleteUser()
     const [selectedUser, setSelectedUser] = useState<Client | null>(null)
+    const [searchQuery, setSearchQuery] = useState("")
 
     const handleDeleteUser = (id: string) => {
         deleteUserMutation.mutate(id, {
@@ -86,9 +87,24 @@ export function AdminUsers({ userClients, isAdmin }: AdminUsersProps) {
         },
     ]
 
+    const filteredBookings = userClients?.filter((b) =>
+        [b._id, b.name, b.email, b.phone,]
+            .some((field) =>
+                field?.toString().toLowerCase().includes(searchQuery.toLowerCase())
+            )
+    ) ?? []
+
     return (
         <>
-            {/* Show Edit Form only when a user is selected */}
+            <div className="flex justify-end mb-4">
+                <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+            </div>
             {selectedUser && (
                 <EditUserForm
                     user={selectedUser}
@@ -97,7 +113,7 @@ export function AdminUsers({ userClients, isAdmin }: AdminUsersProps) {
                 />
             )}
 
-            <CommonTable columns={isAdmin ? columnsAdmin : columns} data={userClients} />
+            <CommonTable columns={isAdmin ? columnsAdmin : columns} data={filteredBookings} />
         </>
     )
 }
