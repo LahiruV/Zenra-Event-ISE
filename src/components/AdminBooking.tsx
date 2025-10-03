@@ -1,18 +1,19 @@
 import { CommonTable } from "./Table"
 import { Edit, Trash } from "lucide-react"
-import { Booking, Client } from "../services/types"
+import { Booking } from "../services/types"
 import { useDeleteBooking } from "../services/queries"
 import { toast } from "sonner"
 import { useState } from "react"
 import { EditBookingForm } from "./EditBookingForm"
 
 interface AdminBookingProps {
-    bookingClients: Client[]
+    bookingClients: Booking[]
 }
 
 export function AdminBooking({ bookingClients }: AdminBookingProps) {
     const useDeleteBookingMutation = useDeleteBooking()
     const [selectedBooking, setSelectedBooking] = useState<Booking | null>()
+    const [searchQuery, setSearchQuery] = useState("")
 
     const handleDeleteBooking = (id: string) => {
         useDeleteBookingMutation.mutate(id, {
@@ -49,13 +50,24 @@ export function AdminBooking({ bookingClients }: AdminBookingProps) {
             )
         },
         {
-            key: 'isPending', label: 'Status', render: (row: any) => (
-                row.isPending ? <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                    Pending
-                </span> : <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    Confirmed
-                </span>
+            key: 'isPending',
+            label: 'Status',
+            render: (row: any) => (
+                row.isPending ? (
+                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                        Pending
+                    </span>
+                ) : (
+                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                        Confirmed
+                    </span>
+                )
             )
+        },
+        {
+            key: 'createdAt', label: 'Created At', render: (row: any) => (
+                new Date(row.createdAt).toLocaleDateString()
+            ),
         },
         {
             key: "actions",
@@ -77,13 +89,36 @@ export function AdminBooking({ bookingClients }: AdminBookingProps) {
                 </div>
             ),
         },
-    ];
+    ]
+
+    const filteredBookings = bookingClients?.filter((b) =>
+        [b._id, b.eventName, b.date, b.name, b.email, b.phone, b.specialNeed, b.isPending ? 'Pending' : 'Confirmed']
+            .some((field) =>
+                field?.toString().toLowerCase().includes(searchQuery.toLowerCase())
+            )
+    ) ?? []
 
     return (
         <>
-            <CommonTable columns={columns} data={bookingClients ?? []} />
+            {/* Search Bar aligned right */}
+            <div className="flex justify-end mb-4">
+                <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+            </div>
+
+            <CommonTable columns={columns} data={filteredBookings} />
+
             {selectedBooking && (
-                <EditBookingForm isReadOnly={false} onClose={() => setSelectedBooking(null)} booking={selectedBooking} />
+                <EditBookingForm
+                    isReadOnly={false}
+                    onClose={() => setSelectedBooking(null)}
+                    booking={selectedBooking}
+                />
             )}
         </>
     )
