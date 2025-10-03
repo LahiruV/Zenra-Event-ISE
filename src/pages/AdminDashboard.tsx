@@ -1,24 +1,28 @@
 import { useState } from 'react'
-import { RefreshCw, Ticket, User, User2, UserCheck } from 'lucide-react'
+import { RefreshCw, Ticket, User, UserCheck } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
 import {
   useClients,
-  useAdmins
+  useAdmins,
+  useBookings
 } from '../services/queries'
 import { AdminUsers } from '../components/AdminUsers'
+import { AdminBooking } from '../components/AdminBooking'
 
 export function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<'users' | 'admins' | 'bookings'>('users')
   const queryClient = useQueryClient()
   const { data: userClients, isLoading: isUserLoading, error: userError } = useClients()
   const { data: adminClients, isLoading: isAdminLoading, error: adminError } = useAdmins()
+  const { data: bookingClients, isLoading: isBookingLoading, error: bookingError } = useBookings()
 
-  const isLoading = isUserLoading || isAdminLoading
-  const error = userError || adminError
+  const isLoading = isUserLoading || isAdminLoading || isBookingLoading
+  const error = userError || adminError || bookingError
 
   const handleRefresh = () => {
     queryClient.invalidateQueries({ queryKey: ['clients'] })
     queryClient.invalidateQueries({ queryKey: ['admins'] })
+    queryClient.invalidateQueries({ queryKey: ['bookings'] })
   }
 
   return (
@@ -73,7 +77,7 @@ export function AdminDashboard() {
                   } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center`}
               >
                 <Ticket className="h-5 w-5 mr-2" />
-                Bookings ({adminClients?.length || 0})
+                Bookings ({bookingClients?.length || 0})
               </button>
             </nav>
           </div>
@@ -87,6 +91,10 @@ export function AdminDashboard() {
           ) : activeTab === 'admins' ? (
             <div className="space-y-6">
               <AdminUsers userClients={adminClients ?? []} isAdmin={true} />
+            </div>
+          ) : activeTab === 'bookings' ? (
+            <div className="space-y-6">
+              <AdminBooking bookingClients={bookingClients ?? []} />
             </div>
           ) : null}
         </div>

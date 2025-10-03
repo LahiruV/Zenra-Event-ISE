@@ -1,14 +1,16 @@
-import { Edit, Trash } from "lucide-react";
-import { CommonTable } from "../components/Table";
-import { getUserBookings, useDeleteBooking, useUser } from "../services/queries";
-import { toast } from "sonner";
-import { EditBookingForm } from "../components/EditBookingForm";
-import { Booking } from "../services/types";
-import { useState } from "react";
+import { CommonTable } from "./Table"
+import { Edit, Trash } from "lucide-react"
+import { Booking, Client } from "../services/types"
+import { useDeleteBooking } from "../services/queries"
+import { toast } from "sonner"
+import { useState } from "react"
+import { EditBookingForm } from "./EditBookingForm"
 
-export function MyBookingList() {
-    const { data: userClients } = useUser()
-    const { data: bookingsData } = getUserBookings(userClients?._id)
+interface AdminBookingProps {
+    bookingClients: Client[]
+}
+
+export function AdminBooking({ bookingClients }: AdminBookingProps) {
     const useDeleteBookingMutation = useDeleteBooking()
     const [selectedBooking, setSelectedBooking] = useState<Booking | null>()
 
@@ -60,34 +62,29 @@ export function MyBookingList() {
             label: "Actions",
             render: (booking: any) => (
                 <div className="flex space-x-3">
-                    {
-                        booking.isPending &&
-                        <>
-                            <button
-                                onClick={() => handleEditBooking(booking)}
-                                className="text-blue-600 hover:text-blue-800"
-                            >
-                                <Edit size={16} />
-                            </button>
-                            <button
-                                onClick={() => handleDeleteBooking(booking._id)}
-                                className="text-red-600 hover:text-red-800"
-                            >
-                                <Trash size={16} />
-                            </button>
-                        </>
-                    }
+                    <button
+                        onClick={() => handleEditBooking(booking)}
+                        className="text-blue-600 hover:text-blue-800"
+                    >
+                        <Edit size={16} />
+                    </button>
+                    <button
+                        onClick={() => handleDeleteBooking(booking._id)}
+                        className="text-red-600 hover:text-red-800"
+                    >
+                        <Trash size={16} />
+                    </button>
                 </div>
             ),
         },
     ];
 
     return (
-        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
-            <CommonTable columns={columns} data={bookingsData ?? []} />
+        <>
+            <CommonTable columns={columns} data={bookingClients ?? []} />
             {selectedBooking && (
-                <EditBookingForm isReadOnly={true} onClose={() => setSelectedBooking(null)} booking={selectedBooking} />
+                <EditBookingForm isReadOnly={false} onClose={() => setSelectedBooking(null)} booking={selectedBooking} />
             )}
-        </div>
+        </>
     )
 }

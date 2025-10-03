@@ -425,6 +425,48 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "example": "any"
+                },
+                "eventId": {
+                  "example": "any"
+                },
+                "eventName": {
+                  "example": "any"
+                },
+                "eventPrice": {
+                  "example": "any"
+                },
+                "date": {
+                  "example": "any"
+                },
+                "name": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "phone": {
+                  "example": "any"
+                },
+                "specialNeed": {
+                  "example": "any"
+                },
+                "isPending": {
+                  "example": "any"
+                },
+                "createdAt": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
