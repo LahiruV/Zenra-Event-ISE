@@ -9,14 +9,14 @@ exports.sendMail = async (req, res) => {
             port: 465,
             secure: true,
             auth: {
-                user: "anjulagehan23@gmail.com", // your email
-                pass: "pplu cpkl nqlt rtwi", // your app password
+                user: "moviehunter2008@gmail.com",
+                pass: "lxit idke gilm ykxo",
             },
         });
 
         // Mail options
         const mailOptions = {
-            from: "anjulagehan23@gmail.com",
+            from: "moviehunter2008@gmail.com",
             to: email,
             subject: header,
             text: content,

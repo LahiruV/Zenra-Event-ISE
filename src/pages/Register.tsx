@@ -38,14 +38,6 @@ export function Register() {
     }
 
     try {
-      const { token } = await registerMutation.mutateAsync({
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        phone: formData.phone,
-        dob: formData.dob,
-      } as RegisterDto)
-      setToken(token)
       const code = authenticateCode()
       setVerificationCode(code)
       await sendMailMutation.mutateAsync({
@@ -56,19 +48,32 @@ export function Register() {
       toast.success('Verification code sent to your email.')
       setIsOpen(true)
     } catch (err) {
-      toast.error('Registration failed. Please try again.')
+      toast.error('Failed to send verification code. Please try again.')
     }
   }
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     if (userInputCode === verificationCode) {
-      toast.success("Email verified successfully!")
-      authLogin(token!)
-      navigate("/")
+      try {
+        const { token } = await registerMutation.mutateAsync({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          phone: formData.phone,
+          dob: formData.dob,
+        } as RegisterDto)
+
+        toast.success("Email verified and account created successfully!")
+        authLogin(token)
+        navigate("/")
+      } catch (err) {
+        toast.error("Registration failed. Please try again.")
+      }
     } else {
       toast.error("Invalid verification code. Please try again.")
     }
   }
+
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
