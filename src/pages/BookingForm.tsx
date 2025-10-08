@@ -20,8 +20,8 @@ export function BookingForm() {
         eventName: "",
         eventPrice: "",
         date: "",
-        name: "",
-        email: "",
+        name: user?.name || "",
+        email: user?.email || "",
         phone: "",
         specialNeed: "",
         isPending: true
@@ -155,32 +155,6 @@ export function BookingForm() {
                 {step === 1 && (
                     <form onSubmit={handleNext} className="space-y-5">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">Name</label>
-                            <input
-                                type="text"
-                                value={formData.name}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, name: e.target.value })
-                                }
-                                required
-                                className="mt-1 block w-full border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2 text-sm focus:border-indigo-500 focus:ring-0 pl-2"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">Email</label>
-                            <input
-                                type="email"
-                                value={formData.email}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, email: e.target.value })
-                                }
-                                required
-                                className="mt-1 block w-full border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2 text-sm focus:border-indigo-500 focus:ring-0 pl-2"
-                            />
-                        </div>
-
-                        <div>
                             <label className="block text-sm font-medium text-gray-700">Phone</label>
                             <input
                                 type="text"
@@ -297,7 +271,7 @@ export function BookingForm() {
                             className="w-full flex justify-center items-center bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition shadow-md"
                         >
                             {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-                            {loading ? "Processing..." : `Pay $${event.price}`}
+                            {loading ? "Processing..." : `Pay ${event.price} LKR`}
                         </button>
                     </form>
                 )}
