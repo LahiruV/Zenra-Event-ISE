@@ -64,6 +64,7 @@ exports.updateBooking = async (req, res) => {
             eventName,
             eventPrice,
             name,
+            date,
             email,
             phone,
             specialNeed,
