@@ -79,7 +79,7 @@ export function BookingForm() {
             eventPrice: event.price,
             userId: user?._id
         }, {
-            onSuccess: (data) => {
+            onSuccess: () => {
                 setLoading(false)
                 toast.success("Booking successful!")
                 setStep(1)
@@ -102,7 +102,7 @@ export function BookingForm() {
                 })
                 navigate('/mybookings')
             },
-            onError: (error) => {
+            onError: () => {
                 setLoading(false)
                 toast.error("Booking failed. Please try again.")
             }
