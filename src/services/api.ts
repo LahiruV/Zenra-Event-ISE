@@ -1,4 +1,4 @@
-import type { LoginDto, RegisterDto, AdminLoginDto, AdminRegisterDto, BookingDto, UpdateBookingDto, UpdateBookingStatusDto } from './types'
+import type { LoginDto, RegisterDto, AdminLoginDto, AdminRegisterDto, BookingDto, UpdateBookingDto, UpdateBookingStatusDto, PhotographerDto } from './types'
 import { API_URL } from './url'
 
 // Authentication APIs
@@ -225,5 +225,61 @@ export async function sendEmail(to: string, subject: string, text: string): Prom
   })
   if (!response.ok) {
     throw new Error('Failed to send email')
+  }
+}
+
+// Photographer Management APIs
+
+export async function createPhotographer(data: PhotographerDto): Promise<any> {
+  const response = await fetch(`${API_URL}/photographers/register`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+  if (!response.ok) {
+    throw new Error('Failed to create booking')
+  }
+  return response.json()
+}
+
+export async function updatePhotographer(id: string, data: Partial<PhotographerDto>): Promise<any> {
+  const response = await fetch(`${API_URL}/photographers/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+  if (!response.ok) {
+    throw new Error('Failed to update photographer')
+  }
+  return response.json()
+}
+
+export async function getAllPhotographers(): Promise<any[]> {
+  const response = await fetch(`${API_URL}/photographers`, {
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    },
+  })
+  if (!response.ok) {
+    throw new Error('Failed to fetch photographers')
+  }
+  return response.json()
+}
+
+export async function deletePhotographer(id: string): Promise<void> {
+  const response = await fetch(`${API_URL}/photographers/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    },
+  })
+  if (!response.ok) {
+    throw new Error('Failed to delete photographer')
   }
 }

@@ -159,3 +159,42 @@ export const useSendMail = () => {
     },
   })
 }
+
+// Photographer queries
+
+export const usePhotographers = () => {
+  return useQuery({
+    queryKey: ['photographers'],
+    queryFn: api.getAllPhotographers,
+  })
+}
+
+export const useAddPhotographer = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (data: { name: string; email: string; phone: string; portfolioLink: string }) => api.createPhotographer(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['photographers-create'] })
+    },
+  })
+}
+
+export const useUpdatePhotographer = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (data: { id: string; name: string; email: string; phone: string; portfolioLink: string }) => api.updatePhotographer(data.id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['photographers-update'] })
+    },
+  })
+}
+
+export const useDeletePhotographer = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => api.deletePhotographer(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['photographers-delete'] })
+    },
+  })
+}

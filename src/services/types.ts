@@ -73,3 +73,9 @@ export interface UpdateBookingDto {
   isPending?: boolean
 }
 
+export interface PhotographerDto {
+  name: string
+  email: string
+  phone: string
+  portfolioLink: string
+}

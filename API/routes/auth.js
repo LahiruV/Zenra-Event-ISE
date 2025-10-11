@@ -12,5 +12,9 @@ router.get("/clients", isAuthenticated, controller.getAllClients);
 router.get("/admins", isAuthenticated, controller.getAllAdmins);
 router.delete("/users/:id", isAuthenticated, controller.deleteUser);
 router.put("/users/:id", isAuthenticated, controller.updateUser);
+router.post("/photographers/register", controller.createPhotographer);
+router.get("/photographers", isAuthenticated, controller.getAllPhotographers);
+router.put("/photographers/:id", isAuthenticated, controller.updatePhotographer);
+router.delete("/photographers/:id", isAuthenticated, controller.deletePhotographer);
 
 module.exports = router;

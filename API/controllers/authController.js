@@ -196,3 +196,87 @@ exports.updateUser = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+exports.createPhotographer = async (req, res) => {
+    const { name, email, phone, portfolioLink } = req.body;
+
+    if (!name || !email) {
+        return res.status(400).json({ error: "Name and email are required" });
+    }
+
+    try {
+        const db = await connectDB();
+        const existingPhotographer = await db.collection("photographers").findOne({ email });
+        if (existingPhotographer) return res.status(400).json({ error: "Email already exists" });
+
+        const result = await db.collection("photographers").insertOne({
+            name,
+            email,
+            phone: phone || "",
+            portfolioLink: portfolioLink || "",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        });
+
+        res.status(201).json({ message: "Photographer created", id: result.insertedId });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+exports.getAllPhotographers = async (req, res) => {
+    try {
+        const db = await connectDB();
+        const photographers = await db.collection("photographers").find().toArray();
+        res.json(photographers);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+exports.updatePhotographer = async (req, res) => {
+    const photographerId = req.params.id;
+    const { name, email, phone, portfolioLink } = req.body;
+
+    try {
+        const db = await connectDB();
+        const result = await db.collection("photographers").updateOne(
+            { _id: require("mongodb").ObjectId.createFromHexString(photographerId) },
+            {
+                $set: {
+                    name,
+                    email,
+                    phone,
+                    portfolioLink,
+                    updatedAt: new Date()
+                }
+            }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: "Photographer not found" });
+        }
+
+        res.json({ message: "Photographer updated successfully" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+exports.deletePhotographer = async (req, res) => {
+    const photographerId = req.params.id;
+    try {
+        const db = await connectDB();
+        const result = await db
+            .collection("photographers")
+            .deleteOne({ _id: require("mongodb").ObjectId.createFromHexString(photographerId) });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ error: "Photographer not found" });
+        }
+
+        res.json({ message: "Photographer deleted successfully" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
