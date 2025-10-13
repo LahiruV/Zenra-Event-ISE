@@ -8,9 +8,10 @@ import {
 } from '../services/queries'
 import { AdminUsers } from '../components/AdminUsers'
 import { AdminBooking } from '../components/AdminBooking'
+import { AdminPhotographers } from '../components/AdminPhotographers'
 
 export function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState<'users' | 'admins' | 'bookings'>('users')
+  const [activeTab, setActiveTab] = useState<'users' | 'admins' | 'bookings' | 'photographers'>('users')
   const queryClient = useQueryClient()
   const { data: userClients, isLoading: isUserLoading, error: userError } = useClients()
   const { data: adminClients, isLoading: isAdminLoading, error: adminError } = useAdmins()
@@ -79,6 +80,16 @@ export function AdminDashboard() {
                 <Ticket className="h-5 w-5 mr-2" />
                 Bookings ({bookingClients?.length || 0})
               </button>
+              <button
+                onClick={() => setActiveTab('photographers')}
+                className={`${activeTab === 'photographers'
+                  ? 'border-yellow-500 text-yellow-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center`}
+              >
+                <Ticket className="h-5 w-5 mr-2" />
+                Photographers ({bookingClients?.length || 0})
+              </button>
             </nav>
           </div>
         </div>
@@ -95,6 +106,10 @@ export function AdminDashboard() {
           ) : activeTab === 'bookings' ? (
             <div className="space-y-6">
               <AdminBooking bookingClients={bookingClients ?? []} />
+            </div>
+          ) : activeTab === 'photographers' ? (
+            <div className="space-y-6">
+              <AdminPhotographers photographerClients={[]} />
             </div>
           ) : null}
         </div>
