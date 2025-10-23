@@ -70,14 +70,27 @@ export function AdminPhotographers({ photographerClients }: AdminPhotographersPr
 
     return (
         <>
-            <div className="flex justify-end mb-4">
-                <input
-                    type="text"
-                    placeholder="Search..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+            <div className="flex justify-between mb-4">
+                <div>
+                    <button className="items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+                        onClick={
+                            () => {
+
+                            }
+                        }
+                    >
+                        Add Photographer
+                    </button>
+                </div>
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
             </div>
             {selectedPhotographer && (
                 <EditUserForm
