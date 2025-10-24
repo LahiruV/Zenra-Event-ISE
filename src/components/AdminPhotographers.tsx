@@ -1,24 +1,29 @@
 import { Column, CommonTable } from "./Table"
 import { Edit, Trash } from "lucide-react"
-import { Client } from "../services/types"
+import { Photographer } from "../services/types"
 import { useDeletePhotographer } from "../services/queries"
 import { toast } from "sonner"
-import { EditUserForm } from "./EditUserForm"
 import { useState } from "react"
+import { AddEditPhotographerForm } from "./AddEditPhotographerForm"
+import { useQueryClient } from "@tanstack/react-query"
 
 interface AdminPhotographersProps {
-    photographerClients: Client[]
+    photographerClients: Photographer[]
 }
 
 export function AdminPhotographers({ photographerClients }: AdminPhotographersProps) {
+    const queryClient = useQueryClient()
     const deletePhotographerMutation = useDeletePhotographer()
-    const [selectedPhotographer, setSelectedPhotographer] = useState<Client | null>(null)
+    const [selectedPhotographer, setSelectedPhotographer] = useState<Photographer | null>(null)
+    const [isFormOpen, setIsFormOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState("")
 
+    // Delete photographer
     const handleDelete = (id: string) => {
         deletePhotographerMutation.mutate(id, {
             onSuccess: () => {
                 toast.success("Photographer deleted successfully")
+                queryClient.invalidateQueries({ queryKey: ['photographers'] })
             },
             onError: () => {
                 toast.error("Failed to delete photographer")
@@ -26,15 +31,26 @@ export function AdminPhotographers({ photographerClients }: AdminPhotographersPr
         })
     }
 
-    const handleEdit = (user: Client) => {
-        setSelectedPhotographer(user)
+    // Open form to edit
+    const handleEdit = (photographer: Photographer) => {
+        setSelectedPhotographer(photographer)
+        setIsFormOpen(true)
     }
 
+    // Open form to add
+    const handleAdd = () => {
+        setSelectedPhotographer(null)
+        setIsFormOpen(true)
+    }
+
+    // Close form
     const handleCloseForm = () => {
         setSelectedPhotographer(null)
+        setIsFormOpen(false)
     }
 
-    const columns: Column<Client>[] = [
+    // Table columns
+    const columns: Column<Photographer>[] = [
         { key: "name", label: "Name" },
         { key: "email", label: "Email" },
         { key: "phone", label: "Phone" },
@@ -61,8 +77,9 @@ export function AdminPhotographers({ photographerClients }: AdminPhotographersPr
         },
     ]
 
+    // Filter photographers by search query
     const filteredPhotographers = photographerClients?.filter((b) =>
-        [b._id, b.name, b.email, b.phone,]
+        [b._id, b.name, b.email, b.phone]
             .some((field) =>
                 field?.toString().toLowerCase().includes(searchQuery.toLowerCase())
             )
@@ -70,14 +87,12 @@ export function AdminPhotographers({ photographerClients }: AdminPhotographersPr
 
     return (
         <>
+            {/* Header with Add button and Search */}
             <div className="flex justify-between mb-4">
                 <div>
-                    <button className="items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-                        onClick={
-                            () => {
-
-                            }
-                        }
+                    <button
+                        className="items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+                        onClick={handleAdd}
                     >
                         Add Photographer
                     </button>
@@ -92,14 +107,16 @@ export function AdminPhotographers({ photographerClients }: AdminPhotographersPr
                     />
                 </div>
             </div>
-            {selectedPhotographer && (
-                <EditUserForm
-                    user={selectedPhotographer}
-                    isAdminRole={false}
+
+            {/* Add/Edit Form Modal */}
+            {isFormOpen && (
+                <AddEditPhotographerForm
+                    photographer={selectedPhotographer}
                     onClose={handleCloseForm}
                 />
             )}
 
+            {/* Table */}
             <CommonTable columns={columns} data={filteredPhotographers} />
         </>
     )

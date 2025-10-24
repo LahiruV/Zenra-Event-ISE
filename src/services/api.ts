@@ -231,7 +231,7 @@ export async function sendEmail(to: string, subject: string, text: string): Prom
 // Photographer Management APIs
 
 export async function createPhotographer(data: PhotographerDto): Promise<any> {
-  const response = await fetch(`${API_URL}/photographers/register`, {
+  const response = await fetch(`${API_URL}/auth/photographers/register`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -246,7 +246,7 @@ export async function createPhotographer(data: PhotographerDto): Promise<any> {
 }
 
 export async function updatePhotographer(id: string, data: Partial<PhotographerDto>): Promise<any> {
-  const response = await fetch(`${API_URL}/photographers/${id}`, {
+  const response = await fetch(`${API_URL}/auth/photographers/${id}`, {
     method: 'PUT',
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -261,7 +261,7 @@ export async function updatePhotographer(id: string, data: Partial<PhotographerD
 }
 
 export async function getAllPhotographers(): Promise<any[]> {
-  const response = await fetch(`${API_URL}/photographers`, {
+  const response = await fetch(`${API_URL}/auth/photographers`, {
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('token')}`,
     },
@@ -273,7 +273,7 @@ export async function getAllPhotographers(): Promise<any[]> {
 }
 
 export async function deletePhotographer(id: string): Promise<void> {
-  const response = await fetch(`${API_URL}/photographers/${id}`, {
+  const response = await fetch(`${API_URL}/auth/photographers/${id}`, {
     method: 'DELETE',
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('token')}`,

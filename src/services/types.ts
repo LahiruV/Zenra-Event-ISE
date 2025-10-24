@@ -79,3 +79,11 @@ export interface PhotographerDto {
   phone: string
   portfolioLink: string
 }
+
+export interface Photographer {
+  _id: string
+  name: string
+  email: string
+  phone: string
+  portfolioLink: string
+}

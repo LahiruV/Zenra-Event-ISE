@@ -4,7 +4,8 @@ import { useQueryClient } from '@tanstack/react-query'
 import {
   useClients,
   useAdmins,
-  useBookings
+  useBookings,
+  usePhotographers
 } from '../services/queries'
 import { AdminUsers } from '../components/AdminUsers'
 import { AdminBooking } from '../components/AdminBooking'
@@ -16,14 +17,16 @@ export function AdminDashboard() {
   const { data: userClients, isLoading: isUserLoading, error: userError } = useClients()
   const { data: adminClients, isLoading: isAdminLoading, error: adminError } = useAdmins()
   const { data: bookingClients, isLoading: isBookingLoading, error: bookingError } = useBookings()
+  const { data: photographerClients, isLoading: isPhotographerLoading, error: photographerError } = usePhotographers()
 
-  const isLoading = isUserLoading || isAdminLoading || isBookingLoading
-  const error = userError || adminError || bookingError
+  const isLoading = isUserLoading || isAdminLoading || isBookingLoading || isPhotographerLoading
+  const error = userError || adminError || bookingError || photographerError
 
   const handleRefresh = () => {
     queryClient.invalidateQueries({ queryKey: ['clients'] })
     queryClient.invalidateQueries({ queryKey: ['admins'] })
     queryClient.invalidateQueries({ queryKey: ['bookings'] })
+    queryClient.invalidateQueries({ queryKey: ['photographers'] })
   }
 
   return (
@@ -88,7 +91,7 @@ export function AdminDashboard() {
                   } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center`}
               >
                 <Ticket className="h-5 w-5 mr-2" />
-                Photographers ({bookingClients?.length || 0})
+                Photographers ({photographerClients?.length || 0})
               </button>
             </nav>
           </div>
@@ -109,7 +112,7 @@ export function AdminDashboard() {
             </div>
           ) : activeTab === 'photographers' ? (
             <div className="space-y-6">
-              <AdminPhotographers photographerClients={[]} />
+              <AdminPhotographers photographerClients={photographerClients ?? []} />
             </div>
           ) : null}
         </div>
