@@ -87,13 +87,7 @@ exports.adminLogin = async (req, res) => {
 };
 
 exports.adminRegister = async (req, res) => {
-    const { name, email, password, adminCode } = req.body;
-
-    if (adminCode === "DEAKIN2024") {
-        const token = jwt.sign({ email, isAdmin: true }, JWT_SECRET);
-        return res.json({ token });
-    }
-
+    const { name, email, password } = req.body;
     try {
         const db = await connectDB();
         const existingAdmin = await db.collection("users").findOne({ email });

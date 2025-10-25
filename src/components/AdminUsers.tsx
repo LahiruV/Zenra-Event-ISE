@@ -87,7 +87,7 @@ export function AdminUsers({ userClients, isAdmin }: AdminUsersProps) {
         },
     ]
 
-    const filteredBookings = userClients?.filter((b) =>
+    const filteredUsers = userClients?.filter((b) =>
         [b._id, b.name, b.email, b.phone,]
             .some((field) =>
                 field?.toString().toLowerCase().includes(searchQuery.toLowerCase())
@@ -113,7 +113,7 @@ export function AdminUsers({ userClients, isAdmin }: AdminUsersProps) {
                 />
             )}
 
-            <CommonTable columns={isAdmin ? columnsAdmin : columns} data={filteredBookings} />
+            <CommonTable columns={isAdmin ? columnsAdmin : columns} data={filteredUsers} />
         </>
     )
 }
